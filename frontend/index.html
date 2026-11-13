@@ -22,7 +22,7 @@
     s.src=urls[index];
     s.onload=function(){
       var app=document.createElement('script');
-      app.src='./app.js';
+      app.src='./app.js?v=flightlane-20261113-2';
       app.onerror=function(){
         var msg=document.getElementById('routeMessage');
         if(msg) msg.textContent='FlightLane app script failed to load. Please reload.';
