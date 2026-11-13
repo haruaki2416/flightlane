@@ -8,4 +8,35 @@
 <section class="nearby-panel panel"><div class="map-heading"><div><p class="eyebrow">FROM YOUR DEPARTURE AIRPORT</p><h2>Nearby airports</h2></div><span class="phase-chip">TOP 10 BY DISTANCE</span></div><div id="nearbyList" class="nearby-list">Loading nearby airports…</div></section>
 <section class="map-panel panel"><div class="map-heading"><div><p class="eyebrow">LIVE FLIGHT MAP</p><h2 id="mapRouteTitle">HND → ITM</h2></div><div class="phase-chip" id="phaseChip">STANDBY</div></div><div id="map" aria-label="Flight route map"></div><div class="map-legend"><span><i class="legend-dot plane-dot"></i>Aircraft</span><span><i class="legend-line done-line"></i>Completed</span><span><i class="legend-line future-line"></i>Planned route</span><span><i class="legend-dot waypoint-dot"></i>Waypoint</span></div></section>
 <section class="stats-grid"><article class="stat panel"><span>DISTANCE REMAINING</span><strong id="distanceValue">— NM</strong><small>Along planned route</small></article><article class="stat panel"><span>TIME REMAINING</span><strong id="etaValue">—</strong><small>At selected speed</small></article><article class="stat panel"><span>GROUND SPEED</span><strong id="groundspeedValue">— KT</strong><small>Estimated</small></article><article class="stat panel"><span>FLIGHT PHASE</span><strong id="flightPhaseValue">STANDBY</strong><small id="phaseDetail">Awaiting clearance</small></article></section><footer>FlightLane is a focus companion and visual simulation prototype. Not for real-world navigation.</footer></main>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script src="./app.js"></script></body></html>
+<script>
+(function(){
+  function loadLeaflet(urls, index){
+    if(index >= urls.length){
+      var msg=document.getElementById('routeMessage');
+      if(msg) msg.textContent='Map library failed to load. Check your connection, then reload FlightLane.';
+      var status=document.getElementById('statusLabel');
+      if(status) status.textContent='MAP LIBRARY ERROR';
+      return;
+    }
+    var s=document.createElement('script');
+    s.src=urls[index];
+    s.onload=function(){
+      var app=document.createElement('script');
+      app.src='./app.js';
+      app.onerror=function(){
+        var msg=document.getElementById('routeMessage');
+        if(msg) msg.textContent='FlightLane app script failed to load. Please reload.';
+        var status=document.getElementById('statusLabel');
+        if(status) status.textContent='APP LOAD ERROR';
+      };
+      document.body.appendChild(app);
+    };
+    s.onerror=function(){loadLeaflet(urls,index+1);};
+    document.body.appendChild(s);
+  }
+  loadLeaflet([
+    'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
+    'https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js'
+  ],0);
+})();
+</script></body></html>
